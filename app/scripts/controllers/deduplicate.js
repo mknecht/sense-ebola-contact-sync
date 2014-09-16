@@ -47,6 +47,6 @@ secsApp.directive('mergeString', function() {
       right: '=',
       title: '@'
     },
-    templateUrl: 'views/deduplicate_row.html'
+    templateUrl: 'views/deduplicate_string.html'
   }
 })
