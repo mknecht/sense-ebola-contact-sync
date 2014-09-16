@@ -8,15 +8,15 @@
       <th ng-class="{duplicate: left.isduplicate}">Left</th>
       <th ng-class="{duplicate: right.isduplicate}">Right</th>
     </tr>
-    <tr class="contact basic actions">
-      <td>Actions</td>
-      <td class=""><button>Unmark</button></td>
-      <td><button>Mark as duplicate</button></td>
-    </tr>
     <tr class="contact basic">
-      <td>Id</td>
+      <td>ID (CouchDB)</td>
       <td>{{left._id | name}}</td>
       <td>{{right._id | name}}</td>
+    </tr>
+    <tr class="contact basic actions">
+      <td>Duplicate?</td>
+      <td duplicate-marker this="left" other="right"></td>
+      <td duplicate-marker this="right" other="left"></td>
     </tr>
     <tr merge-string data-name="lastName" data-title="Last name" left="left" right="right"></tr>
     <tr merge-string data-name="otherNames" data-title="Other names" left="left" right="right"></tr>

@@ -1,0 +1,14 @@
+<div ng-show="this.isDuplicate()">
+  <span ng-show="this.duplicateOf === other._id">
+    Duplicate of the other contact
+  </span>
+  <span ng-hide="this.duplicateOf === other._id">
+    Duplicate of another contact ({{ this.duplicateOf }})
+  </span>
+  <br>
+  <button ng-click="this.duplicateOf = undefined">Unmark as duplicate</button>
+</div>
+<div ng-hide="this.isDuplicate()">
+  Not a duplicate<br>
+  <button ng-click="this.markAsDuplicate(other)">Mark as duplicate</button>
+</div>
