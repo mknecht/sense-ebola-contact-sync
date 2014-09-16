@@ -15,8 +15,8 @@
     </tr>
     <tr class="contact basic actions">
       <td>Duplicate?</td>
-      <td duplicate-marker this="left" other="right"></td>
-      <td duplicate-marker this="right" other="left"></td>
+      <td duplicate-marker obj="left" other="right"></td>
+      <td duplicate-marker obj="right" other="left"></td>
     </tr>
     <tr merge-string data-name="lastName" data-title="Last name" left="left" right="right"></tr>
     <tr merge-string data-name="otherNames" data-title="Other names" left="left" right="right"></tr>
@@ -24,6 +24,11 @@
     <tr merge-string data-name="age" data-title="Age" left="left" right="right"></tr>
     <tr merge-string data-name="address" data-title="Address" left="left" right="right"></tr>
     <tr merge-string data-name="contactType" data-title="Contact type" left="left" right="right"></tr>
+    <tr>
+      <td>Daily Visits</td>
+      <td merge-list data-name="dailyVisits" obj="left" other="right" data-copy-label="-&gt;"></td>
+      <td merge-list data-name="dailyVisits" obj="right" other="left" data-copy-label="&lt;-"></td>
+    </tr>
   </table>
   <div class="panel-footer compact">
   </div>

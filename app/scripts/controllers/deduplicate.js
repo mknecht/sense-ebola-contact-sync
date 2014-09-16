@@ -34,11 +34,15 @@ secsApp
           }
 
           // TODO Choose a suitable pair.
-          $scope.left = contacts[4];
-          $scope.right = contacts[5];
+          var left = contacts[4]
+          contactFactory.addDetails(left)
+          extendContact(left)
+          $scope.left = left
 
-          extendContact($scope.left)
-          extendContact($scope.right)
+          var right = contacts[5]
+          contactFactory.addDetails(right)
+          extendContact(right)
+          $scope.right = right
 
           // TODO Test data to be removed
           $scope.left.duplicateOf = "3e96add5cbba0bcd9345745637017a4h"
@@ -72,12 +76,37 @@ secsApp.directive('mergeString', function() {
   }
 })
 
+
+secsApp.directive('mergeList', function() {
+  return {
+    restrict: 'A',
+    scope: {
+      copyLabel: '@',
+      name: '@',
+      obj: '=',
+      other: '=',
+      title: '@'
+    },
+    templateUrl: 'views/deduplicate_list.html',
+    controller: function($scope) {
+      $scope.append = function(lst, item) {
+        if (lst.indexOf(item) === -1) {
+          lst.push(item)
+        }
+      }
+      $scope.remove = function(lst, item) {
+        lst.splice(lst.indexOf(item), 1)
+      }
+    }
+  }
+})
+
 secsApp.directive('duplicateMarker', function() {
   return {
     restrict: 'A',
     scope: {
-      other: '=',
-      this: '='
+      obj: '=',
+      other: '='
     },
     templateUrl: 'views/deduplicate_marker.html'
   }
