@@ -1,6 +1,6 @@
 <ol>
   <li ng-repeat="item in obj[name]">
-    {{ item }}
+    <insertItemText>{{ item }}</insertItemText>
     <button ng-click="append(other[name], item)" title="copy over">{{ copyLabel }}</button>
     <button ng-click="remove(obj[name], item)" title="delete">x</button>
   </li>

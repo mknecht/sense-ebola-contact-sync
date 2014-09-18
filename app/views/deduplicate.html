@@ -26,8 +26,21 @@
     <tr merge-string data-name="contactType" data-title="Contact type" left="left" right="right"></tr>
     <tr>
       <td>Daily Visits</td>
-      <td merge-list data-name="dailyVisits" obj="left" other="right" data-copy-label="-&gt;"></td>
-      <td merge-list data-name="dailyVisits" obj="right" other="left" data-copy-label="&lt;-"></td>
+      <td merge-list data-name="dailyVisits" obj="left" other="right" data-copy-label="-&gt;">
+	<span class="mergevalue">{{ item.temperature }}°</span> on <span class="mergevalue">{{ item.dateOfVisit | date:SETTINGS.dateTimeFormat}}</span> by <span class="mergevalue">{{ item.interviewer | name }}</span>
+      </td>
+      <td merge-list data-name="dailyVisits" obj="right" other="left" data-copy-label="&lt;-">
+	<span class="mergevalue">{{ item.temperature }}°</span> on <span class="mergevalue">{{ item.dateOfVisit | date:SETTINGS.dateTimeFormat}}</span> by <span class="mergevalue">{{ item.interviewer | name }}</span>
+      </td>
+    </tr>
+    <tr>
+      <td>Sources</td>
+      <td merge-list data-name="sources" obj="left" other="right" data-copy-label="-&gt;">
+	<span class="mergevalue">{{ item.type }}°</span> on <span class="mergevalue">{{ item.imported | date:SETTINGS.dateTimeFormat}}</span>
+      </td>
+      <td merge-list data-name="sources" obj="right" other="left" data-copy-label="&lt;-">
+	<span class="mergevalue">{{ item.type }}°</span> on <span class="mergevalue">{{ item.imported | date:SETTINGS.dateTimeFormat}}</span>
+      </td>
     </tr>
   </table>
   <div class="panel-footer compact">

@@ -13,7 +13,6 @@ secsApp
   .controller('DeduplicateCtrl',
     ['$scope', '$filter', 'ngTableParams', 'contactFactory', 'SETTINGS',
       function ($scope, $filter, NgTableParams, contactFactory, SETTINGS) {
-
         contactFactory.allOrderedByName().then(function(contacts) {
           function extendContact(contact) {
             // Ugly extension of Contact objects, because contacts are
@@ -77,29 +76,51 @@ secsApp.directive('mergeString', function() {
 })
 
 
-secsApp.directive('mergeList', function() {
-  return {
-    restrict: 'A',
-    scope: {
-      copyLabel: '@',
-      name: '@',
-      obj: '=',
-      other: '=',
-      title: '@'
-    },
-    templateUrl: 'views/deduplicate_list.html',
-    controller: function($scope) {
-      $scope.append = function(lst, item) {
-        if (lst.indexOf(item) === -1) {
-          lst.push(item)
+secsApp.directive(
+  'mergeList',
+  ['$compile', '$http', '$templateCache',
+  function($compile, $http, $templateCache) {
+    // Interpret the content of the directive's element
+    // as representing one list item.
+    // Insert it at the insertItemText element.
+    var nameOfMarkerTag = "insertItemText"
+    var templateLoader
+    return {
+      restrict: 'A',
+      scope: {
+        copyLabel: '@',
+        name: '@',
+        obj: '=',
+        other: '=',
+        title: '@'
+      },
+      compile: function(tElement, tAttrs) {
+        var itemHtml = tElement.html()
+        templateLoader = (
+        $http
+          .get('views/deduplicate_list.html', {cache: $templateCache})
+          .success(function(html) { tElement.html(html) }))
+        return function ($scope, element, attrs) {
+          templateLoader.then(function (templateText) {
+           tElement.find(nameOfMarkerTag).html(itemHtml)
+            element.html(tElement.html())
+            $compile(element.contents())($scope)
+          })
+        }
+      },
+      controller: function($scope) {
+        $scope.append = function(lst, item) {
+          if (lst.indexOf(item) === -1) {
+            lst.push(item)
+          }
+        }
+        $scope.remove = function(lst, item) {
+          lst.splice(lst.indexOf(item), 1)
         }
       }
-      $scope.remove = function(lst, item) {
-        lst.splice(lst.indexOf(item), 1)
-      }
     }
-  }
-})
+  }]
+)
 
 secsApp.directive('duplicateMarker', function() {
   return {
