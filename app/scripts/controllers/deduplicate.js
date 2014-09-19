@@ -48,9 +48,6 @@ secsApp
             contactFactory.addDetails(right)
             extendContact(right)
             $scope.right = right
-
-            // TODO Test data to be removed
-            $scope.left.duplicateOf = "3e96add5cbba0bcd9345745637017a4h"
           })
 
           // Start with the best match
