@@ -7,7 +7,7 @@
  * # DeduplicateCtrl
  * Controller of secsApp
  */
-var secsApp = angular.module('secsApp')
+var secsApp = angular.module('secsApp');
 
 secsApp
   .controller('DeduplicateCtrl',
@@ -15,6 +15,7 @@ secsApp
       'duplicateRecognizer',
       function ($scope, $filter, NgTableParams, contactFactory, SETTINGS,
         duplicateRecognizer) {
+
         contactFactory.allOrderedByName().then(function(contacts) {
           function extendContact(contact) {
             // Ugly extension of Contact objects, because contacts are
@@ -24,34 +25,34 @@ secsApp
             // we'd have to pass the functions to the isolated scope.
             if (contact.isDuplicate === undefined) {
               contact.isDuplicate = function() {
-                return this.duplicateOf !== undefined
-              }
+                return this.duplicateOf !== undefined;
+              };
             }
             if (contact.markAsDuplicate === undefined) {
               contact.markAsDuplicate = function(originalContact) {
-                return this.duplicateOf = originalContact._id
-              }
+                return this.duplicateOf = originalContact._id;
+              };
             }
           }
 
-          var matches = duplicateRecognizer.findDuplicateContacts(contacts)
+          var matches = duplicateRecognizer.findDuplicateContacts(contacts);
 
           // Bootstrap pagination
-          $scope.totalItems = matches.length
+          $scope.totalItems = matches.length;
           $scope.$watch('currentPage', function(pagenum) {
-            var left = matches[pagenum][0]
-            contactFactory.addDetails(left)
-            extendContact(left)
-            $scope.left = left
+            var left = matches[pagenum][0];
+            contactFactory.addDetails(left);
+            extendContact(left);
+            $scope.left = left;
 
-            var right = matches[pagenum][1]
-            contactFactory.addDetails(right)
-            extendContact(right)
-            $scope.right = right
-          })
+            var right = matches[pagenum][1];
+            contactFactory.addDetails(right);
+            extendContact(right);
+            $scope.right = right;
+          });
 
           // Start with the best match
-          $scope.currentPage = 0
+          $scope.currentPage = 0;
         });
 
         $scope.toggleStatus = function(contact, event) {
@@ -87,7 +88,6 @@ secsApp.directive('mergeString', function() {
   }
 })
 
-
 secsApp.directive(
   'mergeList',
   ['$compile', '$http', '$templateCache',
@@ -95,8 +95,8 @@ secsApp.directive(
     // Interpret the content of the directive's element
     // as representing one list item.
     // Insert it at the insertItemText element.
-    var nameOfMarkerTag = "insertItemText"
-    var templateLoader
+    var nameOfMarkerTag = "insertItemText";
+    var templateLoader;
     return {
       restrict: 'A',
       scope: {
@@ -107,32 +107,32 @@ secsApp.directive(
         title: '@'
       },
       compile: function(tElement, tAttrs) {
-        var itemHtml = tElement.html()
+        var itemHtml = tElement.html();
         templateLoader = (
         $http
           .get('views/deduplicate_list.html', {cache: $templateCache})
-          .success(function(html) { tElement.html(html) }))
+          .success(function(html) { tElement.html(html) }));
         return function ($scope, element, attrs) {
           templateLoader.then(function (templateText) {
-           tElement.find(nameOfMarkerTag).html(itemHtml)
-            element.html(tElement.html())
-            $compile(element.contents())($scope)
-          })
-        }
+            tElement.find(nameOfMarkerTag).html(itemHtml);
+            element.html(tElement.html());
+            $compile(element.contents())($scope);
+          });
+        };
       },
       controller: function($scope) {
         $scope.append = function(lst, item) {
           if (lst.indexOf(item) === -1) {
-            lst.push(item)
+            lst.push(item);
           }
-        }
+        };
         $scope.remove = function(lst, item) {
-          lst.splice(lst.indexOf(item), 1)
-        }
+          lst.splice(lst.indexOf(item), 1);
+        };
       }
-    }
+    };
   }]
-)
+);
 
 secsApp.directive('duplicateMarker', function() {
   return {
@@ -142,5 +142,5 @@ secsApp.directive('duplicateMarker', function() {
       other: '='
     },
     templateUrl: 'views/deduplicate_marker.html'
-  }
-})
+  };
+});

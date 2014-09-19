@@ -1,24 +1,25 @@
 'use strict';
 
-var secsApp = angular.module('secsApp')
+var secsApp = angular.module('secsApp');
 
 secsApp.factory('duplicateRecognizer',
   ['fastLevenshteinService',
   function duplicateRecognizer(fastLevenshteinService) {
     function isNotDuplicate(it) {
-      return it.duplicateOf === undefined
+      return it.duplicateOf === undefined;
     }
 
     function isAfter(marker) {
-      var found = [false]
+      var found = [false];
       return function(it) {
         if (it === marker) {
-          found[0] = true
+          found[0] = true;
         } else {
           // In else-block, so marker element will be skipped.
-          return found[0]
+          return found[0];
         }
-      }
+        return undefined;
+      };
     }
 
     function isDiffLessThanOrUndefined(maxDiff, left, get) {
@@ -27,16 +28,16 @@ secsApp.factory('duplicateRecognizer',
           get(left) === undefined
                || get(right) === undefined
                || Math.abs(get(left) - get(right)) < maxDiff
-        )
-      }
+        );
+      };
     }
 
     function isLevenshteinDistanceLessThan(maxDist, left, get) {
       return function(right) {
           return get(left) !== undefined
                && get(right) !== undefined
-               && fastLevenshteinService.distance(get(left), get(right)) < maxDist
-      }
+               && fastLevenshteinService.distance(get(left), get(right)) < maxDist;
+      };
     }
 
     function findDuplicateContacts(contacts) {
@@ -64,10 +65,10 @@ secsApp.factory('duplicateRecognizer',
                          2,
                          left,
                          function(it) { return it.otherNames }))
-                       .map(function(right) { return [left, right] })
+                       .map(function(right) { return [left, right] });
             }
           )
-      )
+      );
 
       function calcSimilarity(pair) {
         function ifExistsElseZero(get, then) {
@@ -75,7 +76,7 @@ secsApp.factory('duplicateRecognizer',
             (get(pair[0]) !== undefined && get(pair[1]) !== undefined)
                   ? then(get(pair[0]), get(pair[1]))
                   : 0
-          )
+          );
         }
         // simple addition means: evenly weighted
         return (
@@ -88,18 +89,19 @@ secsApp.factory('duplicateRecognizer',
           + ifExistsElseZero(
             function(it) { return it.otherNames },
             function(left, right) { fastLevenshteinService.distance(left, right) })
-        )
+        );
       }
 
       return [].concat.apply([], duplicatesPerContact.filter(
         function(it) { return it.length > 0 })
       ).sort(function(left, right) {
-               return calcSimilarity(left) - calcSimilarity(right)
-             }).reverse()
+               return calcSimilarity(left) - calcSimilarity(right);
+             }).reverse();
     }
 
     return {
       findDuplicateContacts: findDuplicateContacts
-    }
+    };
   }
-])
+  ]
+);
