@@ -12,7 +12,9 @@ var secsApp = angular.module('secsApp')
 secsApp
   .controller('DeduplicateCtrl',
     ['$scope', '$filter', 'ngTableParams', 'contactFactory', 'SETTINGS',
-      function ($scope, $filter, NgTableParams, contactFactory, SETTINGS) {
+      'duplicateRecognizer',
+      function ($scope, $filter, NgTableParams, contactFactory, SETTINGS,
+        duplicateRecognizer) {
         contactFactory.allOrderedByName().then(function(contacts) {
           function extendContact(contact) {
             // Ugly extension of Contact objects, because contacts are
@@ -32,19 +34,22 @@ secsApp
             }
           }
 
-          // TODO Choose a suitable pair.
-          var left = contacts[4]
-          contactFactory.addDetails(left)
-          extendContact(left)
-          $scope.left = left
+          var matches = duplicateRecognizer.findDuplicateContacts(contacts)
+          var bestMatch = matches.pop()
+          if (bestMatch !== undefined) {
+            var left = bestMatch[0]
+            contactFactory.addDetails(left)
+            extendContact(left)
+            $scope.left = left
 
-          var right = contacts[5]
-          contactFactory.addDetails(right)
-          extendContact(right)
-          $scope.right = right
+            var right = bestMatch[1]
+            contactFactory.addDetails(right)
+            extendContact(right)
+            $scope.right = right
 
-          // TODO Test data to be removed
-          $scope.left.duplicateOf = "3e96add5cbba0bcd9345745637017a4h"
+            // TODO Test data to be removed
+            $scope.left.duplicateOf = "3e96add5cbba0bcd9345745637017a4h"
+          }
         });
 
         $scope.toggleStatus = function(contact, event) {
