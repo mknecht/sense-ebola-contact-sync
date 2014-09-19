@@ -2,10 +2,10 @@
   <td>{{ title }}</td>
   <td>
        <input type="text" ng-model="left[name]">
-       <button ng-click="right[name] = left[name]">-&gt;</button>
+       <button ng-click="copyOver(left, right)">-&gt;</button>
   </td>
   <td>
-       <button ng-click="left[name] = right[name]">&lt;-</button>
+       <button ng-click="copyOver(right, left)">&lt;-</button>
        <input type="text" ng-model="right[name]">
   </td>
 </tr>

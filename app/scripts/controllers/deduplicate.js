@@ -78,7 +78,12 @@ secsApp.directive('mergeString', function() {
       right: '=',
       title: '@'
     },
-    templateUrl: 'views/deduplicate_string.html'
+    templateUrl: 'views/deduplicate_string.html',
+    controller: function($scope) {
+      $scope.copyOver = function(from, to) {
+        to[$scope.name] = from[$scope.name]
+      }
+    }
   }
 })
 
