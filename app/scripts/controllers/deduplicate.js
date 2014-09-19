@@ -35,22 +35,26 @@ secsApp
           }
 
           var matches = duplicateRecognizer.findDuplicateContacts(contacts)
-          matches.pop()
-          var bestMatch = matches.pop()
-          if (bestMatch !== undefined) {
-            var left = bestMatch[0]
+
+          // Bootstrap pagination
+          $scope.totalItems = matches.length
+          $scope.$watch('currentPage', function(pagenum) {
+            var left = matches[pagenum][0]
             contactFactory.addDetails(left)
             extendContact(left)
             $scope.left = left
 
-            var right = bestMatch[1]
+            var right = matches[pagenum][1]
             contactFactory.addDetails(right)
             extendContact(right)
             $scope.right = right
 
             // TODO Test data to be removed
             $scope.left.duplicateOf = "3e96add5cbba0bcd9345745637017a4h"
-          }
+          })
+
+          // Start with the best match
+          $scope.currentPage = 0
         });
 
         $scope.toggleStatus = function(contact, event) {

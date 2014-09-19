@@ -40,6 +40,8 @@ secsApp.factory('duplicateRecognizer',
     }
 
     function findDuplicateContacts(contacts) {
+      // First we find duplicates, i.e. we filter out unlikely matches,
+      // then, we fine-tune for manual merging by sorting.
       var duplicatesPerContact = (
         contacts
           .filter(isNotDuplicate)
