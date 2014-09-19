@@ -35,6 +35,7 @@ secsApp
           }
 
           var matches = duplicateRecognizer.findDuplicateContacts(contacts)
+          matches.pop()
           var bestMatch = matches.pop()
           if (bestMatch !== undefined) {
             var left = bestMatch[0]

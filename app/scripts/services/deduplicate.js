@@ -59,7 +59,7 @@ secsApp.factory('duplicateRecognizer',
                          left,
                          function(it) { return it.lastName }))
                        .filter(isLevenshteinDistanceLessThan(
-                         5,
+                         2,
                          left,
                          function(it) { return it.otherNames }))
                        .map(function(right) { return [left, right] })
@@ -67,8 +67,24 @@ secsApp.factory('duplicateRecognizer',
           )
       )
 
+      function calcSimilarity(pair) {
+        // simple addition means: evenly weighted
+        return (
+          ((pair[0].age !== undefined && pair[1].age !== undefined) ? Math.abs(pair[0].age - pair[1].age) : 0)
+                + ((pair[0].lastName !== undefined && pair[1].lastName !== undefined)
+                  ? fastLevenshteinService.distance(pair[0].lastName, pair[1].lastName)
+                  : 0)
+                + ((pair[0].otherNames !== undefined && pair[1].otherNames !== undefined)
+                  ? fastLevenshteinService.distance(pair[0].otherNames, pair[1].otherNames)
+                  : 0)
+        )
+      }
+
       return [].concat.apply([], duplicatesPerContact.filter(
-        function(it) { return it.length > 0 }))
+        function(it) { return it.length > 0 })
+      ).sort(function(left, right) {
+               return calcSimilarity(left) - calcSimilarity(right)
+             }).reverse()
     }
 
     return {
