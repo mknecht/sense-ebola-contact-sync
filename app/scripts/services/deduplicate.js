@@ -68,15 +68,24 @@ secsApp.factory('duplicateRecognizer',
       )
 
       function calcSimilarity(pair) {
+        function ifExistsElseZero(get, then) {
+          return (
+            (get(pair[0]) !== undefined && get(pair[1]) !== undefined)
+                  ? then(get(pair[0]), get(pair[1]))
+                  : 0
+          )
+        }
         // simple addition means: evenly weighted
         return (
-          ((pair[0].age !== undefined && pair[1].age !== undefined) ? Math.abs(pair[0].age - pair[1].age) : 0)
-                + ((pair[0].lastName !== undefined && pair[1].lastName !== undefined)
-                  ? fastLevenshteinService.distance(pair[0].lastName, pair[1].lastName)
-                  : 0)
-                + ((pair[0].otherNames !== undefined && pair[1].otherNames !== undefined)
-                  ? fastLevenshteinService.distance(pair[0].otherNames, pair[1].otherNames)
-                  : 0)
+          ifExistsElseZero(
+            function(it) { return it.age },
+            function(left, right) { return Math.abs(left - right) })
+          + ifExistsElseZero(
+            function(it) { return it.lastName },
+            function(left, right) { fastLevenshteinService.distance(left, right) })
+          + ifExistsElseZero(
+            function(it) { return it.otherNames },
+            function(left, right) { fastLevenshteinService.distance(left, right) })
         )
       }
 
